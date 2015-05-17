@@ -1,0 +1,83 @@
+body
+  max-width: 1024px
+  padding: 20px
+  margin: 0 auto
+
+.header
+  text-align: center
+
+  &__title
+    font-size: 32px
+
+.city-list
+  display: flex
+  flex-flow: row nowrap
+  justify-content: space-around
+  margin-bottom: 20px
+
+  .city-list__item
+    padding: 10px
+    margin: 0 20px
+    width: 25%
+    min-width: 150px
+    border: 1px solid #eeeeee
+
+    &:hover
+      .city-list__item-remove-button
+        display: block
+
+    .city-list__item-weather-icon
+      position: relative
+      width: 100%
+      max-width: 150px
+      height: 150px
+      border-radius: 50%
+      margin: 0 auto
+      background-repeat: repeat
+      box-shadow: inset 0px 0px 20px rgba(0,0,0,0.5)
+
+    .city-list__item-state
+      display: flex
+      justify-content: space-between
+
+    .city-list__item-remove-wrap
+      display: flex
+      position: absolute
+      width: 100%
+      height: 100%
+      top: 0
+      justify-content: center
+      align-items: center
+
+    .city-list__item-remove-button
+      display: none
+      padding: 5px 7px
+      border-radius: 7px
+      text-transform: uppercase
+      background: lighten(#cf4646,20%)
+      color: #fff
+      cursor: pointer
+
+      &:hover
+        background: #cf4646
+
+.city-add
+  display: flex
+  justify-content: center
+
+  form
+    label
+      display: block
+      padding-bottom: 5px
+
+    .form-item__group
+      text-align: center
+      margin-bottom: 20px
+
+    .form-item__button
+      padding: 5px
+
+    &.ng-submitted
+
+      .ng-invalid
+        border-color: tomato
