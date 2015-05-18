@@ -2,6 +2,7 @@
 <html ng-app="weatherApp">
 <head lang="en">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>MyWeatherApp</title>
     <link rel="stylesheet" href="dist/css/main.css"/>
 </head>
@@ -9,7 +10,7 @@
     <div class="header">
         <h1 class="header__title">MyWeatherApp</h1>
     </div>
-    <div class="city-list" ng-controller="CityListCtrl">
+    <div class="city-list" ng-controller="cityListController">
         <div class="notification" ng-if="!cityList.length">Nothing to show... But you can change it.</div>
         <div class="city-list__item" ng-repeat="city in cityList">
             <div class="city-list__item-name">{{city.name}}</div>
@@ -24,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="city-add" ng-controller="CityAddCtrl">
+    <div class="city-add" ng-controller="cityAddController">
         <form name="cityAddForm" ng-submit="save(city)" novalidate>
             <div class="form-item__group">
                 <label for="city[name]">Enter city</label>

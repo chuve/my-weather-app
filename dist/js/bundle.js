@@ -5,9 +5,10 @@ var weatherApp = require('angular').module('weatherApp', []);
 weatherApp.constant('AppConfig', require('./constants'));
 weatherApp.service('WeatherProvider', require('./services/weatherProvider'));
 weatherApp.factory('CityStorage', require('./services/cityStorage'));
-weatherApp.controller('CityListCtrl', require('./controllers/cityListCtrl'));
-weatherApp.controller('CityAddCtrl', require('./controllers/cityAddCtrl'));
-},{"./constants":"/Users/echuvelev/Development/weather-app/src/js/constants.js","./controllers/cityAddCtrl":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityAddCtrl.js","./controllers/cityListCtrl":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityListCtrl.js","./services/cityStorage":"/Users/echuvelev/Development/weather-app/src/js/services/cityStorage.js","./services/weatherProvider":"/Users/echuvelev/Development/weather-app/src/js/services/weatherProvider.js","angular":"/Users/echuvelev/Development/weather-app/node_modules/angular/index.js"}],"/Users/echuvelev/Development/weather-app/node_modules/angular/angular.js":[function(require,module,exports){
+weatherApp.controller('cityListController', require('./controllers/cityListController'));
+weatherApp.controller('cityAddController', require('./controllers/cityAddController'));
+
+},{"./constants":"/Users/echuvelev/Development/weather-app/src/js/constants.js","./controllers/cityAddController":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityAddController.js","./controllers/cityListController":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityListController.js","./services/cityStorage":"/Users/echuvelev/Development/weather-app/src/js/services/cityStorage.js","./services/weatherProvider":"/Users/echuvelev/Development/weather-app/src/js/services/weatherProvider.js","angular":"/Users/echuvelev/Development/weather-app/node_modules/angular/index.js"}],"/Users/echuvelev/Development/weather-app/node_modules/angular/angular.js":[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -26327,7 +26328,7 @@ module.exports = {
     initCitiesIds: ['5601538', '2643743', '5128638'], // ids by openweathermap
     defaultUpdateTimeout: 30 // value in seconds
 };
-},{}],"/Users/echuvelev/Development/weather-app/src/js/controllers/cityAddCtrl.js":[function(require,module,exports){
+},{}],"/Users/echuvelev/Development/weather-app/src/js/controllers/cityAddController.js":[function(require,module,exports){
 module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
     $scope.cityObj = {};
 
@@ -26345,7 +26346,7 @@ module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
         }
     }
 }];
-},{}],"/Users/echuvelev/Development/weather-app/src/js/controllers/cityListCtrl.js":[function(require,module,exports){
+},{}],"/Users/echuvelev/Development/weather-app/src/js/controllers/cityListController.js":[function(require,module,exports){
 module.exports = ['$scope', '$interval', 'CityStorage', function($scope, $interval, CityStorage) {
     CityStorage.init();
 
