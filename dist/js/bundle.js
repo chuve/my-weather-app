@@ -1,6 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./src/js/index.js":[function(require,module,exports){
 'use strict';
-var weatherApp = require('angular').module('weatherApp', []);
+var angular = require('angular'),
+    ngAutocomplete = require('ng-autocomplete');
+
+var weatherApp = angular.module('weatherApp', [
+    'ngAutocomplete'
+]);
 
 weatherApp.constant('AppConfig', require('./constants'));
 weatherApp.service('WeatherProvider', require('./services/weatherProvider'));
@@ -8,7 +13,7 @@ weatherApp.factory('CityStorage', require('./services/cityStorage'));
 weatherApp.controller('cityListController', require('./controllers/cityListController'));
 weatherApp.controller('cityAddController', require('./controllers/cityAddController'));
 
-},{"./constants":"/Users/echuvelev/Development/weather-app/src/js/constants.js","./controllers/cityAddController":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityAddController.js","./controllers/cityListController":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityListController.js","./services/cityStorage":"/Users/echuvelev/Development/weather-app/src/js/services/cityStorage.js","./services/weatherProvider":"/Users/echuvelev/Development/weather-app/src/js/services/weatherProvider.js","angular":"/Users/echuvelev/Development/weather-app/node_modules/angular/index.js"}],"/Users/echuvelev/Development/weather-app/node_modules/angular/angular.js":[function(require,module,exports){
+},{"./constants":"/Users/echuvelev/Development/weather-app/src/js/constants.js","./controllers/cityAddController":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityAddController.js","./controllers/cityListController":"/Users/echuvelev/Development/weather-app/src/js/controllers/cityListController.js","./services/cityStorage":"/Users/echuvelev/Development/weather-app/src/js/services/cityStorage.js","./services/weatherProvider":"/Users/echuvelev/Development/weather-app/src/js/services/weatherProvider.js","angular":"/Users/echuvelev/Development/weather-app/node_modules/angular/index.js","ng-autocomplete":"/Users/echuvelev/Development/weather-app/node_modules/ng-autocomplete/src/ngAutocomplete.js"}],"/Users/echuvelev/Development/weather-app/node_modules/angular/angular.js":[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -26322,7 +26327,174 @@ var minlengthDirective = function() {
 require('./angular');
 module.exports = angular;
 
-},{"./angular":"/Users/echuvelev/Development/weather-app/node_modules/angular/angular.js"}],"/Users/echuvelev/Development/weather-app/src/js/constants.js":[function(require,module,exports){
+},{"./angular":"/Users/echuvelev/Development/weather-app/node_modules/angular/angular.js"}],"/Users/echuvelev/Development/weather-app/node_modules/ng-autocomplete/src/ngAutocomplete.js":[function(require,module,exports){
+'use strict';
+
+/**
+ * A directive for adding google places autocomplete to a text box
+ * google places autocomplete info: https://developers.google.com/maps/documentation/javascript/places
+ *
+ * Usage:
+ *
+ * <input type="text"  ng-autocomplete ng-model="autocomplete" options="options" details="details/>
+ *
+ * + ng-model - autocomplete textbox value
+ *
+ * + details - more detailed autocomplete result, includes address parts, latlng, etc. (Optional)
+ *
+ * + options - configuration for the autocomplete (Optional)
+ *
+ *       + types: type,        String, values can be 'geocode', 'establishment', '(regions)', or '(cities)'
+ *       + bounds: bounds,     Google maps LatLngBounds Object, biases results to bounds, but may return results outside these bounds
+ *       + country: country    String, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
+ *       + watchEnter:         Boolean, true; on Enter select top autocomplete result. false(default); enter ends autocomplete
+ *
+ * example:
+ *
+ *    options = {
+ *        types: '(cities)',
+ *        country: 'ca'
+ *    }
+**/
+
+angular.module( "ngAutocomplete", [])
+  .directive('ngAutocomplete', function() {
+    return {
+      require: 'ngModel',
+      scope: {
+        ngModel: '=',
+        options: '=?',
+        details: '=?'
+      },
+
+      link: function(scope, element, attrs, controller) {
+
+        //options for autocomplete
+        var opts
+        var watchEnter = false
+        //convert options provided to opts
+        var initOpts = function() {
+
+          opts = {}
+          if (scope.options) {
+
+            if (scope.options.watchEnter !== true) {
+              watchEnter = false
+            } else {
+              watchEnter = true
+            }
+
+            if (scope.options.types) {
+              opts.types = []
+              opts.types.push(scope.options.types)
+              scope.gPlace.setTypes(opts.types)
+            } else {
+              scope.gPlace.setTypes([])
+            }
+
+            if (scope.options.bounds) {
+              opts.bounds = scope.options.bounds
+              scope.gPlace.setBounds(opts.bounds)
+            } else {
+              scope.gPlace.setBounds(null)
+            }
+
+            if (scope.options.country) {
+              opts.componentRestrictions = {
+                country: scope.options.country
+              }
+              scope.gPlace.setComponentRestrictions(opts.componentRestrictions)
+            } else {
+              scope.gPlace.setComponentRestrictions(null)
+            }
+          }
+        }
+
+        if (scope.gPlace == undefined) {
+          scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
+        }
+        google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+          var result = scope.gPlace.getPlace();
+          if (result !== undefined) {
+            if (result.address_components !== undefined) {
+
+              scope.$apply(function() {
+
+                scope.details = result;
+
+                controller.$setViewValue(element.val());
+              });
+            }
+            else {
+              if (watchEnter) {
+                getPlace(result)
+              }
+            }
+          }
+        })
+
+        //function to get retrieve the autocompletes first result using the AutocompleteService 
+        var getPlace = function(result) {
+          var autocompleteService = new google.maps.places.AutocompleteService();
+          if (result.name.length > 0){
+            autocompleteService.getPlacePredictions(
+              {
+                input: result.name,
+                offset: result.name.length
+              },
+              function listentoresult(list, status) {
+                if(list == null || list.length == 0) {
+
+                  scope.$apply(function() {
+                    scope.details = null;
+                  });
+
+                } else {
+                  var placesService = new google.maps.places.PlacesService(element[0]);
+                  placesService.getDetails(
+                    {'reference': list[0].reference},
+                    function detailsresult(detailsResult, placesServiceStatus) {
+
+                      if (placesServiceStatus == google.maps.GeocoderStatus.OK) {
+                        scope.$apply(function() {
+
+                          controller.$setViewValue(detailsResult.formatted_address);
+                          element.val(detailsResult.formatted_address);
+
+                          scope.details = detailsResult;
+
+                          //on focusout the value reverts, need to set it again.
+                          var watchFocusOut = element.on('focusout', function(event) {
+                            element.val(detailsResult.formatted_address);
+                            element.unbind('focusout')
+                          })
+
+                        });
+                      }
+                    }
+                  );
+                }
+              });
+          }
+        };
+
+        controller.$render = function () {
+          var location = controller.$viewValue;
+          element.val(location);
+        };
+
+        //watch options provided to directive
+        scope.watchOptions = function () {
+          return scope.options
+        };
+        scope.$watch(scope.watchOptions, function () {
+          initOpts()
+        }, true);
+
+      }
+    };
+  });
+},{}],"/Users/echuvelev/Development/weather-app/src/js/constants.js":[function(require,module,exports){
 module.exports = {
     apiUrl: 'http://api.openweathermap.org/data/2.5/',
     initCitiesIds: ['5601538', '2643743', '5128638'], // ids by openweathermap
@@ -26339,6 +26511,7 @@ module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
     $scope.save = function(city) {
         if ($scope.cityAddForm.$valid) {
             $scope.cityObj = angular.copy(city);
+            $scope.cityObj.name = $scope.cityObj.name.split(',')[0];
 
             CityStorage.addOne($scope.cityObj);
 
@@ -26406,7 +26579,7 @@ module.exports = ['$interval', 'WeatherProvider', 'AppConfig', function($interva
                         self.fillModel(cityObj, cityData);
                         self.addIntervalPromise(cityObj);
                         cityStorage.push(cityObj);
-                    })
+                    });
                 }).
                 error(function(data, status, headers, config) {
                     console.error(status);

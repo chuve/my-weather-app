@@ -40,7 +40,7 @@ module.exports = ['$interval', 'WeatherProvider', 'AppConfig', function($interva
                         self.fillModel(cityObj, cityData);
                         self.addIntervalPromise(cityObj);
                         cityStorage.push(cityObj);
-                    })
+                    });
                 }).
                 error(function(data, status, headers, config) {
                     console.error(status);

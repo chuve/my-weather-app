@@ -1,5 +1,10 @@
 'use strict';
-var weatherApp = require('angular').module('weatherApp', []);
+var angular = require('angular'),
+    ngAutocomplete = require('ng-autocomplete');
+
+var weatherApp = angular.module('weatherApp', [
+    'ngAutocomplete'
+]);
 
 weatherApp.constant('AppConfig', require('./constants'));
 weatherApp.service('WeatherProvider', require('./services/weatherProvider'));
