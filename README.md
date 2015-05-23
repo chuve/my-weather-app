@@ -15,4 +15,5 @@ http://chuve.github.io/my-weather-app/
     },
     "dependencies": {
       "angular": "^1.3.15"
+      "ng-autocomplete": "^1.0.0"
     }
