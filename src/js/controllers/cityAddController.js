@@ -3,6 +3,7 @@ module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
 
     $scope.reset = function() {
         $scope.city = angular.copy({});
+        $scope.cityAddForm.$setPristine();
     };
 
     $scope.save = function(city) {
@@ -10,9 +11,9 @@ module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
             $scope.cityObj = angular.copy(city);
             $scope.cityObj.name = $scope.cityObj.name.split(',')[0];
 
-            CityStorage.addOne($scope.cityObj);
-
-            $scope.reset();
+            CityStorage.addOne($scope.cityObj).then(function() {
+                $scope.reset();
+            });
         }
     }
 }];

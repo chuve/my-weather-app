@@ -1,4 +1,5 @@
 body {
+  font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
   max-width: 1024px;
   padding: 20px;
   margin: 0 auto; }
@@ -89,13 +90,21 @@ body {
       display: block;
       padding-bottom: 5px; }
     .city-add form .input-text,
-    .city-add form .selector,
-    .city-add form .button {
+    .city-add form .selector {
       width: 100%;
       height: 35px;
-      font-size: 20px;
+      font-size: 16px;
       background: #fff;
-      border-radius: 0px; }
+      border-radius: 0px;
+      font-weight: normal; }
+    .city-add form .button {
+      text-transform: uppercase;
+      padding: 10px 20px;
+      background: #97e4e4;
+      border: none;
+      cursor: pointer; }
+      .city-add form .button:hover {
+        background: #46cfcf; }
     .city-add form .input-text {
       text-align: center; }
     .city-add form .form-item__group {
@@ -104,4 +113,4 @@ body {
     .city-add form .form-item__button {
       padding: 5px; }
     .city-add form.ng-submitted .ng-invalid {
-      border-color: tomato; }
+      border: 2px inset #da6e6e; }

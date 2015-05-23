@@ -33,7 +33,7 @@ module.exports = ['$interval', 'WeatherProvider', 'AppConfig', function($interva
 
         addAll: function(ids) {
             var self = this;
-            WeatherProvider.getWeatherByIds(ids).
+            return WeatherProvider.getWeatherByIds(ids).
                 success(function(data) {
                     data.list.forEach(function(cityData){
                         var cityObj = { update_interval: AppConfig.defaultUpdateTimeout };
@@ -50,9 +50,9 @@ module.exports = ['$interval', 'WeatherProvider', 'AppConfig', function($interva
         addOne: function(cityObj) {
             var self = this;
 
-            WeatherProvider.getWeatherByName(cityObj.name).
+            return WeatherProvider.getWeatherByName(cityObj.name).
                 success(function(data, status, headers, config) {
-                    if (data.cod !== '404') {
+                    if (data.cod !== '404' && data.id !== 0) {
                         self.fillModel(cityObj, data);
                         self.addIntervalPromise(cityObj);
                         cityStorage.push(cityObj);

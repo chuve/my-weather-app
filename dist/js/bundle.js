@@ -26479,7 +26479,7 @@ angular.module( "ngAutocomplete", [])
         };
 
         controller.$render = function () {
-          var location = controller.$viewValue;
+          var location = '';
           element.val(location);
         };
 
@@ -26487,6 +26487,7 @@ angular.module( "ngAutocomplete", [])
         scope.watchOptions = function () {
           return scope.options
         };
+
         scope.$watch(scope.watchOptions, function () {
           initOpts()
         }, true);
@@ -26506,6 +26507,7 @@ module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
 
     $scope.reset = function() {
         $scope.city = angular.copy({});
+        $scope.cityAddForm.$setPristine();
     };
 
     $scope.save = function(city) {
@@ -26513,9 +26515,9 @@ module.exports = ['$scope', 'CityStorage', function($scope, CityStorage) {
             $scope.cityObj = angular.copy(city);
             $scope.cityObj.name = $scope.cityObj.name.split(',')[0];
 
-            CityStorage.addOne($scope.cityObj);
-
-            $scope.reset();
+            CityStorage.addOne($scope.cityObj).then(function() {
+                $scope.reset();
+            });
         }
     }
 }];
@@ -26524,10 +26526,6 @@ module.exports = ['$scope', '$interval', 'CityStorage', function($scope, $interv
     CityStorage.init();
 
     $scope.cityList = CityStorage.getList();
-
-    $scope.$on('$destroy', function(event) {
-        console.log(event);
-    });
 
     $scope.removeCity = function(index) {
         if ($scope.cityList[index].hasOwnProperty('intervalPromise')) {
@@ -26572,7 +26570,7 @@ module.exports = ['$interval', 'WeatherProvider', 'AppConfig', function($interva
 
         addAll: function(ids) {
             var self = this;
-            WeatherProvider.getWeatherByIds(ids).
+            return WeatherProvider.getWeatherByIds(ids).
                 success(function(data) {
                     data.list.forEach(function(cityData){
                         var cityObj = { update_interval: AppConfig.defaultUpdateTimeout };
@@ -26589,9 +26587,9 @@ module.exports = ['$interval', 'WeatherProvider', 'AppConfig', function($interva
         addOne: function(cityObj) {
             var self = this;
 
-            WeatherProvider.getWeatherByName(cityObj.name).
+            return WeatherProvider.getWeatherByName(cityObj.name).
                 success(function(data, status, headers, config) {
-                    if (data.cod !== '404') {
+                    if (data.cod !== '404' && data.id !== 0) {
                         self.fillModel(cityObj, data);
                         self.addIntervalPromise(cityObj);
                         cityStorage.push(cityObj);
