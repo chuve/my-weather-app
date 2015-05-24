@@ -18,7 +18,7 @@ weatherApp.controller('cityAddController', require('./controllers/cityAddControl
 weatherApp.config(function($routeProvider) {
     $routeProvider.
         when('/' , {
-            templateUrl: '/src/templates/main.html'
+            templateUrl: 'src/templates/main.html'
         }).otherwise('/');
 }).run(function(CityStorage) {
     CityStorage.init()
