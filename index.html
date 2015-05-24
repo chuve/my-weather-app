@@ -10,40 +10,8 @@
     <div class="app-header">
         <h1 class="app-header__title">MyWeatherApp</h1>
     </div>
-    <div class="city-list" ng-controller="cityListController" >
-        <div class="notification" ng-if="!cityList.length">Nothing to show... But you can change it.</div>
-        <div class="city-list__item" ng-repeat="city in cityList">
-            <div class="city-list__item-name">{{city.name}}</div>
-            <div class="city-list__item-weather-icon" ng-style="{ 'background-image': 'url(//openweathermap.org/img/w/{{city.icon}}.png)' }">
-                <div class="city-list__item-remove-wrap">
-                    <div class="city-list__item-remove-button" ng-click="removeCity($index)">Delete</div>
-                </div>
-            </div>
-            <div class="city-list__item-state">
-                <div class="city-list__item-state-temperature">{{city.temp}} C</div>
-                <div class="city-list__item-state-weather">{{city.weather}}</div>
-            </div>
-        </div>
-    </div>
-    <div class="city-add" ng-controller="cityAddController">
-        <form name="cityAddForm" ng-submit="save(city)" novalidate>
-            <div class="form-item__group">
-                <label for="city[name]">Enter city</label>
-                <input type="text" class="input-text" ng-autocomplete ng-model="city.name" options="{ types: '(cities)' }" name="city[name]" id="city[name]" required/>
-            </div>
-            <div class="form-item__group">
-                <label for="city[update_interval]">Set update interval</label>
-                <select class="selector" name="city[update_interval]" id="city[update_interval]" ng-model="city.update_interval" required>
-                    <option value="15">15 sec</option>
-                    <option value="30">30 sec</option>
-                    <option value="45">45 sec</option>
-                    <option value="60">60 sec</option>
-                </select>
-            </div>
-            <div class="form-item__group">
-                <button class="button">Add one</button>
-            </div>
-        </form>
+    <div class="app-body" ng-view>
+        <div class="loader">Loading...</div>
     </div>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&language=en"></script>
     <script src="dist/js/bundle.js"></script>

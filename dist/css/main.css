@@ -9,6 +9,9 @@ body {
   .app-header__title {
     font-size: 32px; }
 
+.loader {
+  text-align: center; }
+
 .city-list {
   display: -webkit-box;
   display: -webkit-flex;

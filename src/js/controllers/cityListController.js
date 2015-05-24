@@ -1,5 +1,4 @@
 module.exports = ['$scope', '$interval', 'CityStorage', function($scope, $interval, CityStorage) {
-    CityStorage.init();
 
     $scope.cityList = CityStorage.getList();
 
